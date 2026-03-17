@@ -4,7 +4,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { categories, products } from '../data/products'
+import { categories, manufacturers, products } from '../data/products'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -59,6 +59,7 @@ function ProductCard({ product }) {
 /* ─── Page ─── */
 export default function Catalog() {
   const [activeTab, setActiveTab] = useState('sauna')
+  const [activeMfr, setActiveMfr] = useState('all')
   const rootRef  = useRef(null)
   const isFirst  = useRef(true)
 
@@ -82,8 +83,7 @@ export default function Catalog() {
     return () => ctx.revert()
   }, [])
 
-  const handleTab = id => {
-    setActiveTab(id)
+  const animateCards = () => {
     setTimeout(() => {
       gsap.fromTo('.product-card',
         { opacity: 0, y: 24 },
@@ -91,6 +91,26 @@ export default function Catalog() {
       )
     }, 0)
   }
+
+  const handleTab = id => {
+    setActiveTab(id)
+    setActiveMfr('all')
+    animateCards()
+  }
+
+  const handleMfr = id => {
+    setActiveMfr(id)
+    animateCards()
+  }
+
+  const visibleProducts = activeMfr === 'all'
+    ? products[activeTab]
+    : products[activeTab].filter(p => p.manufacturer === activeMfr)
+
+  // only show manufacturers that have products in the active tab
+  const availableMfrs = manufacturers.filter(m =>
+    products[activeTab].some(p => p.manufacturer === m.id)
+  )
 
   return (
     <div ref={rootRef}>
@@ -143,11 +163,43 @@ export default function Catalog() {
             ))}
           </div>
 
+          {/* Manufacturer filter */}
+          <div className="flex flex-wrap gap-2 mb-10">
+            <button
+              onClick={() => handleMfr('all')}
+              className={`px-4 py-1.5 text-xs font-semibold uppercase tracking-wider border transition-all ${
+                activeMfr === 'all'
+                  ? 'bg-brand-primary border-brand-primary text-white'
+                  : 'bg-white border-gray-200 text-gray-500 hover:border-brand-primary hover:text-brand-primary'
+              }`}
+            >
+              Всі виробники
+            </button>
+            {availableMfrs.map(m => (
+              <button
+                key={m.id}
+                onClick={() => handleMfr(m.id)}
+                className={`px-4 py-1.5 text-xs font-semibold uppercase tracking-wider border transition-all ${
+                  activeMfr === m.id
+                    ? 'bg-brand-primary border-brand-primary text-white'
+                    : 'bg-white border-gray-200 text-gray-500 hover:border-brand-primary hover:text-brand-primary'
+                }`}
+              >
+                {m.label}
+                <span className="ml-1.5 opacity-60 normal-case font-normal">{m.country}</span>
+              </button>
+            ))}
+          </div>
+
           {/* Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
-            {products[activeTab].map(product => (
+            {visibleProducts.length > 0 ? visibleProducts.map(product => (
               <ProductCard key={product.id} product={product} />
-            ))}
+            )) : (
+              <p className="col-span-4 text-center text-gray-400 py-16 text-lg">
+                Немає товарів цього виробника в даній категорії
+              </p>
+            )}
           </div>
 
           {/* Bottom CTA */}
