@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -6,6 +6,69 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
 gsap.registerPlugin(ScrollTrigger)
+
+/* ─── Hero carousel images ─── */
+const HERO_IMAGES = [
+  { src: 'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=720&h=820&fit=crop&q=80', alt: 'Камін в інтер\'єрі' },
+  { src: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=720&h=820&fit=crop&q=80', alt: 'Піч для сауни' },
+  { src: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=720&h=820&fit=crop&q=80', alt: 'Опалювальна піч' },
+  { src: 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=720&h=820&fit=crop&q=80', alt: 'Сауна' },
+  { src: 'https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=720&h=820&fit=crop&q=80', alt: 'Монтаж димоходу' },
+]
+
+function HeroCarousel() {
+  const [current, setCurrent] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent(i => (i + 1) % HERO_IMAGES.length)
+    }, 4000)
+    return () => clearInterval(timer)
+  }, [])
+
+  return (
+    <div className="relative">
+      {/* Offset frame */}
+      <div className="absolute -top-5 -right-5 w-full h-full border border-brand-primary/25 pointer-events-none z-10" />
+
+      {/* Slides */}
+      <div className="relative w-full h-[520px] overflow-hidden">
+        {HERO_IMAGES.map((img, i) => (
+          <img
+            key={img.src}
+            src={img.src}
+            alt={img.alt}
+            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
+            style={{ opacity: i === current ? 1 : 0 }}
+          />
+        ))}
+      </div>
+
+      {/* Corner accents */}
+      <div className="absolute bottom-0 left-0 h-1 w-20 bg-brand-primary z-10" />
+      <div className="absolute bottom-0 left-0 w-1 h-20 bg-brand-primary z-10" />
+
+      {/* Badge */}
+      <div className="absolute top-6 left-6 bg-brand-primary px-4 py-2 z-10">
+        <p className="font-display text-white text-xs uppercase tracking-widest">Гарантія</p>
+        <p className="font-display text-white font-bold text-xl leading-none">3 роки</p>
+      </div>
+
+      {/* Pagination dots */}
+      <div className="absolute bottom-4 right-4 flex gap-2 z-10">
+        {HERO_IMAGES.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            className={`h-3 rounded-full transition-all duration-300 ${
+              i === current ? 'bg-brand-primary w-7' : 'w-3 bg-white/40 hover:bg-white/70'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
 
 /* ─── Data ─── */
 const SERVICES = [
@@ -225,25 +288,9 @@ export default function Home() {
               </div>
             </div>
 
-            {/* RIGHT — framed image (desktop only) */}
+            {/* RIGHT — hero carousel (desktop only) */}
             <div className="hidden lg:block hero-img">
-              <div className="relative">
-                {/* Offset frame */}
-                <div className="absolute -top-5 -right-5 w-full h-full border border-brand-primary/25 pointer-events-none" />
-                <img
-                  src="https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=720&h=820&fit=crop&q=80"
-                  alt="Камін в інтер'єрі"
-                  className="w-full h-[520px] object-cover"
-                />
-                {/* Corner accent */}
-                <div className="absolute bottom-0 left-0 h-1 w-20 bg-brand-primary" />
-                <div className="absolute bottom-0 left-0 w-1 h-20 bg-brand-primary" />
-                {/* Badge */}
-                <div className="absolute top-6 left-6 bg-brand-primary px-4 py-2">
-                  <p className="font-display text-white text-xs uppercase tracking-widest">Гарантія</p>
-                  <p className="font-display text-white font-bold text-xl leading-none">3 роки</p>
-                </div>
-              </div>
+              <HeroCarousel />
             </div>
           </div>
         </div>
