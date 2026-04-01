@@ -165,7 +165,14 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-forge-border pt-6 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-forge-muted/60">
-          <p>© 2026 Буржуйка. Усі права захищені.</p>
+          <p>
+            © 2026 Буржуйка. Усі права захищені.{' '}
+            <Link to="/admin/login" className="text-forge-muted/40 hover:text-brand-primary transition-colors ml-1" aria-label="Адміністрування" title="Адмін">
+              <svg xmlns="http://www.w3.org/2000/svg" className="inline w-3 h-3 -mt-0.5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 1a5 5 0 0 1 5 5v2h1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2h1V6a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v2h6V6a3 3 0 0 0-3-3zm0 9a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+              </svg>
+            </Link>
+          </p>
           <p>
             Професійний монтаж та продаж печей, камінів і обладнання для бань та
             лазні

@@ -2,9 +2,10 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useQuery } from '@tanstack/react-query'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { categories, manufacturers, products } from '../data/products'
+import { fetchProducts, fetchCategories, fetchManufacturers } from '../api/products'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -20,6 +21,11 @@ function ProductCard({ product }) {
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+        {product.is_on_sale && (
+          <div className="absolute top-3 left-3 bg-brand-primary text-white text-xs font-bold uppercase tracking-widest px-2.5 py-1">
+            SALE
+          </div>
+        )}
       </div>
 
       {/* Content — flex-1 so all cards grow to the same row height */}
@@ -29,7 +35,7 @@ function ProductCard({ product }) {
         </h3>
 
         <ul className="space-y-1.5 mb-4 flex-1">
-          {product.specs.map(spec => (
+          {(product.specs || []).map(spec => (
             <li key={spec} className="text-gray-600 text-xs flex items-start gap-2">
               <span className="text-brand-primary font-bold leading-none mt-0.5">—</span>
               <span>{spec}</span>
@@ -37,13 +43,7 @@ function ProductCard({ product }) {
           ))}
         </ul>
 
-        <div className="flex items-end justify-between pt-4 border-t border-gray-100 mt-auto">
-          <div>
-            <p className="text-gray-400 text-xs uppercase tracking-widest mb-0.5">Ціна від</p>
-            <p className="font-display text-2xl font-bold text-brand-primary leading-none">
-              {product.price} <span className="text-sm font-normal">грн</span>
-            </p>
-          </div>
+        <div className="flex items-end justify-end pt-4 border-t border-gray-100 mt-auto">
           <Link
             to="/contacts"
             className="bg-brand-primary hover:bg-brand-dark text-white font-semibold text-xs px-5 py-2.5 uppercase tracking-wider transition-all hover:shadow-md"
@@ -60,8 +60,23 @@ function ProductCard({ product }) {
 export default function Catalog() {
   const [activeTab, setActiveTab] = useState('sauna')
   const [activeMfr, setActiveMfr] = useState('all')
-  const rootRef  = useRef(null)
-  const isFirst  = useRef(true)
+  const rootRef = useRef(null)
+  const isFirst = useRef(true)
+
+  const { data: allProducts = [], isLoading } = useQuery({
+    queryKey: ['products'],
+    queryFn: fetchProducts,
+  })
+
+  const { data: categories = [] } = useQuery({
+    queryKey: ['categories'],
+    queryFn: fetchCategories,
+  })
+
+  const { data: manufacturers = [] } = useQuery({
+    queryKey: ['manufacturers'],
+    queryFn: fetchManufacturers,
+  })
 
   /* Initial page animation */
   useEffect(() => {
@@ -70,26 +85,32 @@ export default function Catalog() {
         { y: 40, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }
       )
-      setTimeout(() => {
-        if (isFirst.current) {
-          isFirst.current = false
-          gsap.fromTo('.product-card',
-            { opacity: 0, y: 32 },
-            { opacity: 1, y: 0, stagger: 0.04, duration: 0.25, ease: 'power2.out', delay: 0.1 }
-          )
-        }
-      }, 0)
     }, rootRef)
     return () => ctx.revert()
   }, [])
 
-  const animateCards = () => {
-    setTimeout(() => {
+  /* Animate cards when visible products change */
+  const categoryProducts = allProducts.filter(p => p.category_id === activeTab)
+  const visibleProducts  = activeMfr === 'all'
+    ? categoryProducts
+    : categoryProducts.filter(p => p.manufacturer_id === activeMfr)
+
+  useEffect(() => {
+    if (visibleProducts.length === 0) return
+    if (isFirst.current) {
+      isFirst.current = false
       gsap.fromTo('.product-card',
-        { opacity: 0, y: 24 },
-        { opacity: 1, y: 0, stagger: 0.04, duration: 0.2, ease: 'power2.out' }
+        { opacity: 0, y: 32 },
+        { opacity: 1, y: 0, stagger: 0.04, duration: 0.25, ease: 'power2.out', delay: 0.1 }
       )
-    }, 0)
+    }
+  }, [visibleProducts.length])
+
+  const animateCards = () => {
+    gsap.fromTo('.product-card',
+      { opacity: 0, y: 24 },
+      { opacity: 1, y: 0, stagger: 0.04, duration: 0.2, ease: 'power2.out' }
+    )
   }
 
   const handleTab = id => {
@@ -103,13 +124,9 @@ export default function Catalog() {
     animateCards()
   }
 
-  const visibleProducts = activeMfr === 'all'
-    ? products[activeTab]
-    : products[activeTab].filter(p => p.manufacturer === activeMfr)
-
-  // only show manufacturers that have products in the active tab
+  // Only show manufacturers that have products in the active tab
   const availableMfrs = manufacturers.filter(m =>
-    products[activeTab].some(p => p.manufacturer === m.id)
+    categoryProducts.some(p => p.manufacturer_id === m.id)
   )
 
   return (
@@ -192,15 +209,23 @@ export default function Catalog() {
           </div>
 
           {/* Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
-            {visibleProducts.length > 0 ? visibleProducts.map(product => (
-              <ProductCard key={product.id} product={product} />
-            )) : (
-              <p className="col-span-4 text-center text-gray-400 py-16 text-lg">
-                Немає товарів цього виробника в даній категорії
-              </p>
-            )}
-          </div>
+          {isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="bg-white h-80 animate-pulse" />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
+              {visibleProducts.length > 0 ? visibleProducts.map(product => (
+                <ProductCard key={product.id} product={product} />
+              )) : (
+                <p className="col-span-4 text-center text-gray-400 py-16 text-lg">
+                  Немає товарів цього виробника в даній категорії
+                </p>
+              )}
+            </div>
+          )}
 
           {/* Bottom CTA */}
           <div className="mt-20 bg-forge-black relative overflow-hidden py-16 px-8 text-center">
