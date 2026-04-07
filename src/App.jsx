@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import { QueryClient, QueryClientProvider, QueryCache } from '@tanstack/react-query'
+import { HelmetProvider } from 'react-helmet-async'
 import { AuthProvider, useAuth } from './hooks/useAuth'
 import Home from './pages/Home'
 import Catalog from './pages/Catalog'
@@ -37,6 +38,7 @@ function ProtectedRoute({ children }) {
 
 export default function App() {
   return (
+    <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <BrowserRouter>
@@ -56,5 +58,6 @@ export default function App() {
         </BrowserRouter>
       </AuthProvider>
     </QueryClientProvider>
+    </HelmetProvider>
   )
 }

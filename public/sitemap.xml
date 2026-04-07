@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://burzhuyka.com.ua/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://burzhuyka.com.ua/catalog</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://burzhuyka.com.ua/contacts</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <!-- Sauna stoves -->
+  <url><loc>https://burzhuyka.com.ua/catalog/klasyk</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://burzhuyka.com.ua/catalog/prutok</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://burzhuyka.com.ua/catalog/heizer</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://burzhuyka.com.ua/catalog/panorama</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://burzhuyka.com.ua/catalog/horyzont</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://burzhuyka.com.ua/catalog/kaskad</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <!-- Heating stoves -->
+  <url><loc>https://burzhuyka.com.ua/catalog/ohniev</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://burzhuyka.com.ua/catalog/vertykal</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://burzhuyka.com.ua/catalog/vertykal-kameni</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://burzhuyka.com.ua/catalog/konvektor-100</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://burzhuyka.com.ua/catalog/prom</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <!-- Fireplace -->
+  <url><loc>https://burzhuyka.com.ua/catalog/kaminna-topka-6kw</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+</urlset>

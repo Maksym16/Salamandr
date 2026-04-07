@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useQuery } from '@tanstack/react-query'
+import { Helmet } from 'react-helmet-async'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { fetchProducts } from '../api/products'
@@ -224,6 +225,14 @@ export default function Home() {
 
   return (
     <div ref={rootRef} className="bg-forge-black text-forge-cream">
+      <Helmet>
+        <title>Буржуйка — Продаж та монтаж печей і камінів | Київ</title>
+        <meta name="description" content="Продаж та монтаж печей для сауни, опалювальних печей та камінів. Виробник Новаслав та інші бренди. Установка під ключ — Київ та область." />
+        <meta property="og:title" content="Буржуйка — Продаж та монтаж печей і камінів | Київ" />
+        <meta property="og:description" content="Продаж та монтаж печей для сауни, опалювальних печей та камінів. Установка під ключ — Київ та область." />
+        <meta property="og:url" content="https://burzhuyka.com.ua" />
+      </Helmet>
+
       <Navbar />
 
       {/* ═══════════ HERO ═══════════ */}

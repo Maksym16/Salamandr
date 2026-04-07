@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useQuery } from '@tanstack/react-query'
+import { Helmet } from 'react-helmet-async'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { fetchProducts, fetchCategories, fetchManufacturers } from '../api/products'
@@ -128,6 +129,14 @@ export default function Catalog() {
 
   return (
     <div ref={rootRef}>
+      <Helmet>
+        <title>Каталог печей та камінів — Буржуйка</title>
+        <meta name="description" content="Каталог печей для сауни, опалювальних печей та камінів. Новаслав та інші виробники. Київ та область." />
+        <meta property="og:title" content="Каталог печей та камінів — Буржуйка" />
+        <meta property="og:description" content="Каталог печей для сауни, опалювальних печей та камінів. Новаслав та інші виробники. Київ та область." />
+        <meta property="og:url" content="https://burzhuyka.com.ua/catalog" />
+      </Helmet>
+
       <Navbar />
 
       {/* ── Dark header ── */}

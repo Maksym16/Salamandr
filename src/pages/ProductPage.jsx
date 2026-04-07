@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
+import { Helmet } from 'react-helmet-async'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { fetchProductBySlug } from '../api/products'
@@ -79,6 +80,31 @@ export default function ProductPage() {
 
   return (
     <div>
+      <Helmet>
+        <title>{product ? `${product.name} — Буржуйка` : 'Буржуйка'}</title>
+        <meta name="description" content={product?.description?.slice(0, 155) ?? 'Деталі товару — Буржуйка'} />
+        <meta property="og:title" content={product ? `${product.name} — Буржуйка` : 'Буржуйка'} />
+        <meta property="og:description" content={product?.description?.slice(0, 155) ?? ''} />
+        {product?.image && <meta property="og:image" content={product.image} />}
+        <meta property="og:url" content={`https://burzhuyka.com.ua/catalog/${product?.slug ?? ''}`} />
+        {product && (
+          <script type="application/ld+json">{JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Product',
+            name: product.name,
+            description: product.description ?? undefined,
+            image: product.image ?? undefined,
+            brand: { '@type': 'Brand', name: product.manufacturer_label ?? 'Новаслав' },
+            offers: {
+              '@type': 'Offer',
+              availability: 'https://schema.org/InStock',
+              priceCurrency: 'UAH',
+              seller: { '@type': 'Organization', name: 'Буржуйка' },
+            },
+          })}</script>
+        )}
+      </Helmet>
+
       <Navbar />
 
       {/* Dark header */}

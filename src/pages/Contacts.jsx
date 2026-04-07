@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
+import { Helmet } from 'react-helmet-async'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
@@ -81,6 +82,14 @@ export default function Contacts() {
 
   return (
     <div ref={rootRef}>
+      <Helmet>
+        <title>Контакти — Буржуйка | Київ</title>
+        <meta name="description" content="Зв'яжіться з нами для консультації по монтажу та продажу печей і камінів. Київ та область." />
+        <meta property="og:title" content="Контакти — Буржуйка" />
+        <meta property="og:description" content="Зв'яжіться з нами для консультації по монтажу та продажу печей і камінів. Київ та область." />
+        <meta property="og:url" content="https://burzhuyka.com.ua/contacts" />
+      </Helmet>
+
       <Navbar />
 
       {/* ── Dark page header ── */}
