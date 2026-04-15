@@ -2,10 +2,24 @@ require('dotenv').config()
 const express = require('express')
 const cors    = require('cors')
 const path    = require('path')
+const fs      = require('fs')
 
+console.log('[startup] Node version:', process.version)
+console.log('[startup] NODE_ENV:', process.env.NODE_ENV)
+console.log('[startup] PORT:', process.env.PORT)
+console.log('[startup] DATABASE_URL set:', !!process.env.DATABASE_URL)
+console.log('[startup] JWT_SECRET set:', !!process.env.JWT_SECRET)
+console.log('[startup] CLOUDINARY_CLOUD_NAME set:', !!process.env.CLOUDINARY_CLOUD_NAME)
+
+const distPath = path.join(__dirname, '../dist')
+console.log('[startup] dist path:', distPath)
+console.log('[startup] dist exists:', fs.existsSync(distPath))
+
+console.log('[startup] Loading routes...')
 const authRoutes     = require('./routes/auth')
 const productsRoutes = require('./routes/products')
 const uploadRoute    = require('./routes/upload')
+console.log('[startup] Routes loaded OK')
 
 const app  = express()
 const PORT = process.env.PORT || 3001
@@ -25,13 +39,13 @@ app.use('/api/upload',   uploadRoute)
 app.get('/api/health', (_req, res) => res.json({ ok: true }))
 
 // Serve built frontend
-app.use(express.static(path.join(__dirname, '../dist')))
+app.use(express.static(distPath))
 
 // SPA fallback — all non-API routes return index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist/index.html'))
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'))
 })
 
 app.listen(PORT, () => {
-  console.log(`Backend running on http://localhost:${PORT}`)
+  console.log(`[startup] Server running on port ${PORT}`)
 })
