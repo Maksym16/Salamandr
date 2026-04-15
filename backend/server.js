@@ -11,7 +11,7 @@ console.log('[startup] DATABASE_URL set:', !!process.env.DATABASE_URL)
 console.log('[startup] JWT_SECRET set:', !!process.env.JWT_SECRET)
 console.log('[startup] CLOUDINARY_CLOUD_NAME set:', !!process.env.CLOUDINARY_CLOUD_NAME)
 
-const distPath = path.join(__dirname, '../dist')
+const distPath = path.join(__dirname, './dist')
 console.log('[startup] dist path:', distPath)
 console.log('[startup] dist exists:', fs.existsSync(distPath))
 
