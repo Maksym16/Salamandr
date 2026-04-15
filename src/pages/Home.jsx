@@ -179,30 +179,30 @@ export default function Home() {
       /* Hero staggered line reveal */
       gsap.fromTo('.hero-line',
         { yPercent: 110 },
-        { yPercent: 0, duration: 1, stagger: 0.12, ease: 'power4.out', delay: 0.15 }
+        { yPercent: 0, duration: 1, stagger: 0.12, ease: 'power4.out' }
       )
       gsap.fromTo('.hero-body',
         { y: 28, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', delay: 0.55 }
+        { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', delay: 0.4 }
       )
       gsap.fromTo('.hero-btn',
         { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, stagger: 0.1, duration: 0.7, ease: 'power3.out', delay: 0.75 }
+        { y: 0, opacity: 1, stagger: 0.1, duration: 0.7, ease: 'power3.out', delay: 0.55 }
       )
       gsap.fromTo('.hero-stat',
         { y: 16, opacity: 0 },
-        { y: 0, opacity: 1, stagger: 0.08, duration: 0.6, ease: 'power2.out', delay: 0.95 }
+        { y: 0, opacity: 1, stagger: 0.08, duration: 0.6, ease: 'power2.out', delay: 0.65 }
       )
       gsap.fromTo('.hero-img',
         { x: 60, opacity: 0 },
-        { x: 0, opacity: 1, duration: 1.2, ease: 'power3.out', delay: 0.3 }
+        { x: 0, opacity: 1, duration: 1.2, ease: 'power3.out', delay: 0.1 }
       )
 
       /* Services scroll reveal */
-      gsap.fromTo('.service-card',
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, stagger: 0.08, duration: 0.65, ease: 'power3.out',
-          scrollTrigger: { trigger: '.services-section', start: 'top 78%', once: true } }
+      gsap.set('.service-card', { opacity: 0, y: 80, scale: 0.96 })
+      gsap.to('.service-card',
+        { y: 0, opacity: 1, scale: 1, stagger: 0.15, duration: 0.85, ease: 'power3.out',
+          scrollTrigger: { trigger: '.services-section', start: 'top 82%', once: true } }
       )
 
       /* Catalog preview */
@@ -312,7 +312,7 @@ export default function Home() {
       </section>
 
       {/* ═══════════ SERVICES ═══════════ */}
-      <section className="services-section py-24 bg-forge-dark">
+      <section className="services-section py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Section header */}
@@ -335,7 +335,7 @@ export default function Home() {
           </div>
 
           {/* Single unified grid: photo cards row + service list rows */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-forge-border">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px">
             {/* Photo cards */}
             {SERVICES.map(s => (
               <div
