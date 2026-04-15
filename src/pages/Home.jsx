@@ -12,11 +12,11 @@ gsap.registerPlugin(ScrollTrigger)
 
 /* ─── Hero carousel images ─── */
 const HERO_IMAGES = [
-  { src: 'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=720&h=820&fit=crop&q=80', alt: 'Камін в інтер\'єрі' },
-  { src: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=720&h=820&fit=crop&q=80', alt: 'Піч для сауни' },
-  { src: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=720&h=820&fit=crop&q=80', alt: 'Опалювальна піч' },
-  { src: 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=720&h=820&fit=crop&q=80', alt: 'Сауна' },
-  { src: 'https://images.unsplash.com/photo-1584622781564-1d987f7333c1?w=720&h=820&fit=crop&q=80', alt: 'Монтаж димоходу' },
+  { src: '/home_page_imgs/pexels-artbovich-6301175.jpg', alt: 'Камін в інтер\'єрі' },
+  { src: '/home_page_imgs/borsuika.jpg',                 alt: 'Опалювальна піч' },
+  { src: '/home_page_imgs/heater.jpg',                   alt: 'Нагрівач' },
+  { src: '/home_page_imgs/sauna.jpg',                    alt: 'Сауна' },
+  { src: '/home_page_imgs/sauna_shelves.jpg',            alt: 'Полиці сауни' },
 ]
 
 function HeroCarousel() {
@@ -73,21 +73,21 @@ const SERVICES = [
     id: '01',
     title: 'Монтаж димоходів',
     desc: 'Встановлення одностінних та утеплених (термо) димоходів під ключ.',
-    img:  'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=900&h=700&fit=crop&q=80',
+    img:  '/home_page_imgs/side_pipe.jpg',
     points: ['Встановлення одностінних та утеплених (термо) димоходів', 'Гільзовка димоходних каналів', 'Монтаж керамічних димоходів'],
   },
   {
     id: '02',
     title: 'Монтаж камінів',
     desc: 'Каміни та вставки провідних євробрендів — Kratki, Schmid, Romotop. Монтаж під ключ.',
-    img:  'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&h=700&fit=crop&q=80',
+    img:  '/home_page_imgs/fireplace.jpg',
     points: ['Монтаж камінних топок', 'Монтаж термоізоляційних коробів', 'Термоізоляція стін в зоні каміна', 'Розвідка теплого повітря від каміна'],
   },
   {
     id: '03',
     title: 'Монтаж саун та бань',
     desc: 'Комплексне облаштування парних — від каркасу та ізоляції до оздоблення і підключення обладнання.',
-    img:  'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=900&h=700&fit=crop&q=80',
+    img:  '/home_page_imgs/sauna_shelves_lights.jpg',
     points: ['Монтаж каркаса та тепло-пароізоляції', 'Обшивка вагонкою та монтаж полків', 'Встановлення та під\'єднання нагрівального обладнання', 'Монтаж вентиляції, освітлення та декоративних елементів'],
   },
 ]

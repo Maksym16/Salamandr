@@ -36,10 +36,17 @@ export default function Navbar() {
             onClick={() => setOpen(false)}
             className="flex items-center gap-2.5 group"
           >
+            {/* Mobile logo */}
             <img
-              src="/logo/burzuika_logo_64.png"
+              src="/logo/logo2.png"
               alt="Буржуйка"
-              className="w-16 h-16 md:w-20 md:h-20 object-contain"
+              className="block md:hidden h-8 w-auto object-contain"
+            />
+            {/* Desktop logo */}
+            <img
+              src="/logo/logo.png"
+              alt="Буржуйка"
+              className="hidden md:block h-10 w-auto object-contain"
             />
             <span className="font-display text-xl font-bold tracking-[0.12em] text-forge-cream uppercase leading-none">
               Буржуйка
