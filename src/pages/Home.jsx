@@ -7,6 +7,7 @@ import { Helmet } from 'react-helmet-async'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { fetchProducts } from '../api/products'
+import { fetchGallery } from '../api/gallery'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -171,6 +172,22 @@ export default function Home() {
     queryKey: ['products'],
     queryFn: fetchProducts,
   })
+
+  const { data: galleryImages = [] } = useQuery({
+    queryKey: ['gallery'],
+    queryFn: fetchGallery,
+  })
+  const carouselImages = galleryImages.slice(0, 10)
+  const [carouselIdx, setCarouselIdx] = useState(0)
+  const carouselMax = Math.max(0, carouselImages.length - 3)
+  const prevSlide = () => setCarouselIdx(i => Math.max(0, i - 1))
+  const nextSlide = () => setCarouselIdx(i => Math.min(carouselMax, i + 1))
+
+  useEffect(() => {
+    if (carouselImages.length <= 3) return
+    const t = setInterval(() => setCarouselIdx(i => (i >= carouselMax ? 0 : i + 1)), 3500)
+    return () => clearInterval(t)
+  }, [carouselImages.length, carouselMax])
 
   const countByCategory = (id) => allProducts.filter(p => p.category_id === id).length
 
@@ -379,6 +396,104 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ═══════════ OUR WORK ═══════════ */}
+      {carouselImages.length > 0 && (
+        <section className="gallery-preview-section py-24 bg-forge-black">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="h-px w-10 bg-brand-primary flex-shrink-0" />
+                  <span className="text-brand-primary font-sans font-medium text-xs uppercase tracking-[0.22em]">Портфоліо</span>
+                </div>
+                <h2 className="font-display text-4xl sm:text-5xl font-bold uppercase text-forge-cream leading-none">
+                  Наші роботи
+                </h2>
+                <p className="text-forge-muted mt-3 text-sm">Переглянте приклади наших установок</p>
+              </div>
+              <div className="flex items-center gap-4">
+                {/* Arrows */}
+                <div className="flex gap-2">
+                  <button
+                    onClick={prevSlide}
+                    disabled={carouselIdx === 0}
+                    className="w-10 h-10 border border-forge-border flex items-center justify-center text-forge-dim hover:border-brand-primary hover:text-brand-primary transition-all disabled:opacity-30 disabled:cursor-default"
+                    aria-label="Назад"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={nextSlide}
+                    disabled={carouselIdx >= carouselMax}
+                    className="w-10 h-10 border border-forge-border flex items-center justify-center text-forge-dim hover:border-brand-primary hover:text-brand-primary transition-all disabled:opacity-30 disabled:cursor-default"
+                    aria-label="Вперед"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+                <Link
+                  to="/gallery"
+                  className="hidden sm:inline-flex items-center gap-2 text-forge-muted hover:text-brand-primary text-sm font-medium uppercase tracking-wide transition-colors"
+                >
+                  Дивитись усі <span className="text-lg leading-none">→</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Carousel track */}
+            <div className="overflow-hidden">
+              <div
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${carouselIdx * (100 / 3)}%)` }}
+              >
+                {carouselImages.map((img) => (
+                  <div key={img.id} className="w-1/3 flex-shrink-0 px-1.5">
+                    <Link to="/gallery" className="group block aspect-square overflow-hidden bg-forge-surface">
+                      <img
+                        src={img.url}
+                        alt={img.title || ''}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Dots */}
+            {carouselImages.length > 3 && (
+              <div className="flex justify-center gap-1.5 mt-6">
+                {Array.from({ length: carouselMax + 1 }).map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCarouselIdx(i)}
+                    className={`h-1 rounded-full transition-all duration-300 ${
+                      i === carouselIdx ? 'bg-brand-primary w-6' : 'w-3 bg-forge-border hover:bg-forge-dim'
+                    }`}
+                    aria-label={`Слайд ${i + 1}`}
+                  />
+                ))}
+              </div>
+            )}
+
+            <div className="text-center mt-8 sm:hidden">
+              <Link
+                to="/gallery"
+                className="inline-block border border-brand-primary text-brand-primary font-semibold px-8 py-3 text-sm uppercase tracking-widest hover:bg-brand-primary hover:text-white transition-all"
+              >
+                Дивитись усі роботи
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ═══════════ CATALOG PREVIEW ═══════════ */}
       <section className="catalog-preview py-24 bg-forge-surface">

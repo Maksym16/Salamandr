@@ -19,6 +19,7 @@ console.log('[startup] Loading routes...')
 const authRoutes     = require('./routes/auth')
 const productsRoutes = require('./routes/products')
 const uploadRoute    = require('./routes/upload')
+const galleryRoutes  = require('./routes/gallery')
 console.log('[startup] Routes loaded OK')
 
 const app  = express()
@@ -35,6 +36,7 @@ app.use(express.json())
 app.use('/api/auth',     authRoutes)
 app.use('/api/products', productsRoutes)
 app.use('/api/upload',   uploadRoute)
+app.use('/api/gallery',  galleryRoutes)
 
 app.get('/api/health', (_req, res) => res.json({ ok: true }))
 

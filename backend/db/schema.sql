@@ -39,6 +39,14 @@ INSERT INTO categories (id, label) VALUES
   ('fireplace', 'Каміни')
 ON CONFLICT (id) DO NOTHING;
 
+CREATE TABLE IF NOT EXISTS gallery_images (
+  id         SERIAL PRIMARY KEY,
+  url        TEXT NOT NULL,
+  public_id  VARCHAR(500),
+  title      VARCHAR(255),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
 -- Seed manufacturers
 INSERT INTO manufacturers (id, label, country) VALUES
   ('harvia',    'Harvia',    'Фінляндія'),

@@ -2,6 +2,7 @@ import { Link, NavLink, Routes, Route, Navigate, useNavigate } from 'react-route
 import { useAuth } from '../../hooks/useAuth'
 import ProductList from './ProductList'
 import ProductForm from './ProductForm'
+import GalleryAdmin from './GalleryAdmin'
 
 function FlameIcon() {
   return (
@@ -49,6 +50,18 @@ export default function Dashboard() {
           >
             Каталог товарів
           </NavLink>
+          <NavLink
+            to="/admin/gallery"
+            className={({ isActive }) =>
+              `block px-3 py-2.5 text-sm font-medium transition-colors rounded-sm ${
+                isActive
+                  ? 'text-brand-primary bg-brand-primary/10'
+                  : 'text-forge-dim hover:text-forge-cream hover:bg-forge-surface'
+              }`
+            }
+          >
+            Галерея
+          </NavLink>
         </nav>
 
         <div className="p-4 border-t border-forge-border">
@@ -69,6 +82,7 @@ export default function Dashboard() {
           <Route path="products"          element={<ProductList />} />
           <Route path="products/new"      element={<ProductForm />} />
           <Route path="products/:id/edit" element={<ProductForm />} />
+          <Route path="gallery"           element={<GalleryAdmin />} />
         </Routes>
       </main>
     </div>

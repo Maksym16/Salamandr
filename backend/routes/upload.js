@@ -29,7 +29,7 @@ router.post('/', requireAuth, upload.single('image'), (req, res) => {
     { folder: 'burzhuyka', resource_type: 'image' },
     (err, result) => {
       if (err) return res.status(500).json({ error: err.message })
-      res.json({ url: result.secure_url })
+      res.json({ url: result.secure_url, public_id: result.public_id })
     }
   )
   stream.end(req.file.buffer)
