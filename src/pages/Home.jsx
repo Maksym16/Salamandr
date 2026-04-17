@@ -8,6 +8,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { fetchProducts } from '../api/products'
 import { fetchGallery } from '../api/gallery'
+import { fetchHeroCarousel } from '../api/heroCarousel'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -20,15 +21,19 @@ const HERO_IMAGES = [
   { src: '/home_page_imgs/sauna_shelves.jpg',            alt: 'Полиці сауни' },
 ]
 
-function HeroCarousel() {
+function HeroCarousel({ images: slides = HERO_IMAGES }) {
   const [current, setCurrent] = useState(0)
 
   useEffect(() => {
+    setCurrent(0)
+  }, [slides])
+
+  useEffect(() => {
     const timer = setInterval(() => {
-      setCurrent(i => (i + 1) % HERO_IMAGES.length)
+      setCurrent(i => (i + 1) % slides.length)
     }, 4000)
     return () => clearInterval(timer)
-  }, [])
+  }, [slides.length])
 
   return (
     <div className="relative">
@@ -37,11 +42,11 @@ function HeroCarousel() {
 
       {/* Slides */}
       <div className="relative w-full h-[520px] overflow-hidden">
-        {HERO_IMAGES.map((img, i) => (
+        {slides.map((img, i) => (
           <img
-            key={img.src}
-            src={img.src}
-            alt={img.alt}
+            key={img.src || img.url}
+            src={img.src || img.url}
+            alt={img.alt || ''}
             className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
             style={{ opacity: i === current ? 1 : 0 }}
           />
@@ -54,7 +59,7 @@ function HeroCarousel() {
 
       {/* Pagination dots */}
       <div className="absolute bottom-4 right-4 flex gap-2 z-10">
-        {HERO_IMAGES.map((_, i) => (
+        {slides.map((_, i) => (
           <button
             key={i}
             onClick={() => setCurrent(i)}
@@ -172,6 +177,12 @@ export default function Home() {
     queryKey: ['products'],
     queryFn: fetchProducts,
   })
+
+  const { data: heroImages = [] } = useQuery({
+    queryKey: ['hero-carousel'],
+    queryFn: fetchHeroCarousel,
+  })
+  const heroSlides = heroImages.length > 0 ? heroImages : HERO_IMAGES
 
   const { data: galleryImages = [] } = useQuery({
     queryKey: ['gallery'],
@@ -319,7 +330,7 @@ export default function Home() {
 
             {/* RIGHT — hero carousel (desktop only) */}
             <div className="hidden lg:block hero-img">
-              <HeroCarousel />
+              <HeroCarousel images={heroSlides} />
             </div>
           </div>
         </div>

@@ -16,10 +16,11 @@ console.log('[startup] dist path:', distPath)
 console.log('[startup] dist exists:', fs.existsSync(distPath))
 
 console.log('[startup] Loading routes...')
-const authRoutes     = require('./routes/auth')
-const productsRoutes = require('./routes/products')
-const uploadRoute    = require('./routes/upload')
-const galleryRoutes  = require('./routes/gallery')
+const authRoutes          = require('./routes/auth')
+const productsRoutes      = require('./routes/products')
+const uploadRoute         = require('./routes/upload')
+const galleryRoutes       = require('./routes/gallery')
+const heroCarouselRoutes  = require('./routes/heroCarousel')
 console.log('[startup] Routes loaded OK')
 
 const app  = express()
@@ -33,10 +34,11 @@ if (process.env.NODE_ENV !== 'production') {
 }
 app.use(express.json())
 
-app.use('/api/auth',     authRoutes)
-app.use('/api/products', productsRoutes)
-app.use('/api/upload',   uploadRoute)
-app.use('/api/gallery',  galleryRoutes)
+app.use('/api/auth',           authRoutes)
+app.use('/api/products',       productsRoutes)
+app.use('/api/upload',         uploadRoute)
+app.use('/api/gallery',        galleryRoutes)
+app.use('/api/hero-carousel',  heroCarouselRoutes)
 
 app.get('/api/health', (_req, res) => res.json({ ok: true }))
 

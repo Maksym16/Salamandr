@@ -1,14 +1,6 @@
 import { useState } from 'react'
-import { useNavigate, Navigate } from 'react-router-dom'
+import { useNavigate, Navigate, Link } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
-
-function FlameIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#ffffff">
-      <path d="M424-282q13 11 27.5 15.5T480-262q29 0 52.5-18.5T560-334q5-47-29-69.5T480-462q-5 14-5 26t3 26q3 17 7 32t1 32q-5 18-22 37t-40 27ZM80-80v-800h800v800H80Zm400-160q50 0 85-35t35-85q0-24-10-40t-28-30q-38-27-63.5-56.5T458-546q-44 35-71 79.5T360-362q0 35 36 78.5t84 43.5Zm-320 80h80v-80h90q-23-29-36.5-61T280-362q0-46 10-86.5t36.5-78.5q26.5-38 73.5-75.5T520-680q-11 44 9.5 93.5T606-496q33 24 53.5 56.5T680-360q0 35-11 64.5T640-240h80v80h80v-640H160v640Zm320-80Z" />
-    </svg>
-  )
-}
 
 export default function AdminLogin() {
   const { login, isAuthenticated } = useAuth()
@@ -39,9 +31,7 @@ export default function AdminLogin() {
     <div className="min-h-screen bg-forge-black flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="flex items-center gap-2.5 mb-8 justify-center">
-          <div className="w-8 h-8 bg-brand-primary flex items-center justify-center">
-            <FlameIcon />
-          </div>
+          <img src="/logo/logo.png" alt="Буржуйка" className="h-8 w-auto object-contain" />
           <span className="font-display text-lg font-bold tracking-[0.12em] text-forge-cream uppercase">
             Буржуйка
           </span>
@@ -100,6 +90,12 @@ export default function AdminLogin() {
             {loading ? 'Вхід...' : 'Увійти'}
           </button>
         </form>
+
+        <div className="mt-6 text-center">
+          <Link to="/" className="text-forge-muted hover:text-brand-primary text-xs uppercase tracking-widest transition-colors">
+            ← На сайт
+          </Link>
+        </div>
       </div>
     </div>
   )
