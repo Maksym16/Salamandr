@@ -141,10 +141,10 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:burzhuyka_montazh@gmail.com"
+                  href="mailto:burzhuyka.montazh@gmail.com"
                   className="hover:text-brand-primary transition-colors"
                 >
-                  burzhuyka_montazh@gmail.com
+                  burzhuyka.montazh@gmail.com
                 </a>
               </li>
               <li className="text-forge-muted">м.Київ, Україна</li>

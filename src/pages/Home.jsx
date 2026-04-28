@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -98,38 +98,6 @@ const SERVICES = [
   },
 ]
 
-const SERVICE_LIST = [
-  {
-    icon: '🔩',
-    title: 'Сталеві димоходи',
-    desc: 'Модульні системи Schiedel, Permeter, Profi — одно- та двостінні, для будь-якого котла',
-  },
-  {
-    icon: '🧱',
-    title: 'Керамічні димоходи',
-    desc: 'Системи Ecoosmose, Tona, Jawal — максимальна стійкість до конденсату та кислот',
-  },
-  {
-    icon: '🔥',
-    title: 'Каміні вставки',
-    desc: 'Kratki, Schmid, Romotop — монтаж у готовий портал або під облицювання під ключ',
-  },
-  {
-    icon: '🪨',
-    title: 'Облицювання камінів',
-    desc: 'Клінкерна цегла, натуральний камінь, декоративна штукатурка, мармур',
-  },
-  {
-    icon: '💨',
-    title: 'Парогенератори',
-    desc: 'Встановлення Helo, Tylo, Harvia для хамамів і парових лазень будь-якого об\'єму',
-  },
-  {
-    icon: '🛠️',
-    title: 'Техобслуговування',
-    desc: 'Чищення, перевірка тяги, ремонт та гідроізоляція димоходів і саун',
-  },
-]
 
 const CATALOG_CATS = [
   { label: 'Печі для саун',    categoryId: 'sauna',     icon: '🔥' },
@@ -139,20 +107,12 @@ const CATALOG_CATS = [
 
 const STATS = [
   { num: '500+',  label: 'Виконаних проектів' },
-  { num: '10',    label: 'Років на ринку'      },
-  { num: '1',     label: 'Роки гарантії на послуги та продукцію'       },
+  { num: '10+',    label: 'Років на ринку'      },
+  { num: '1+',     label: 'Роки гарантії на послуги та продукцію'       },
   { num: '24/7',  label: 'Підтримка клієнтів'  },
 ]
 
 /* ─── SVG icons ─── */
-function PhoneIcon({ className }) {
-  return (
-    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
-      <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-    </svg>
-  )
-}
-
 function TgIcon({ className }) {
   return (
     <svg className={className} fill="currentColor" viewBox="0 0 24 24">
@@ -202,40 +162,30 @@ export default function Home() {
 
   const countByCategory = (id) => allProducts.filter(p => p.category_id === id).length
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const ctx = gsap.context(() => {
+      /* Set initial states before first paint — prevents flash */
+      gsap.set('.hero-line',  { yPercent: 110 })
+      gsap.set('.hero-body',  { y: 28, opacity: 0 })
+      gsap.set('.hero-stat',  { y: 16, opacity: 0 })
+      gsap.set('.hero-img',   { x: 60, opacity: 0 })
+      gsap.set('.service-card', { opacity: 0, y: 80, scale: 0.96 })
+      gsap.set('.cat-tile',   { y: 44, opacity: 0 })
+
       /* Hero staggered line reveal */
-      gsap.fromTo('.hero-line',
-        { yPercent: 110 },
-        { yPercent: 0, duration: 1, stagger: 0.12, ease: 'power4.out' }
-      )
-      gsap.fromTo('.hero-body',
-        { y: 28, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', delay: 0.4 }
-      )
-      gsap.fromTo('.hero-btn',
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, stagger: 0.1, duration: 0.7, ease: 'power3.out', delay: 0.55 }
-      )
-      gsap.fromTo('.hero-stat',
-        { y: 16, opacity: 0 },
-        { y: 0, opacity: 1, stagger: 0.08, duration: 0.6, ease: 'power2.out', delay: 0.65 }
-      )
-      gsap.fromTo('.hero-img',
-        { x: 60, opacity: 0 },
-        { x: 0, opacity: 1, duration: 1.2, ease: 'power3.out', delay: 0.1 }
-      )
+      gsap.to('.hero-line', { yPercent: 0, duration: 1, stagger: 0.12, ease: 'power4.out' })
+      gsap.to('.hero-body', { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', delay: 0.4 })
+      gsap.to('.hero-stat', { y: 0, opacity: 1, stagger: 0.08, duration: 0.6, ease: 'power2.out', delay: 0.65 })
+      gsap.to('.hero-img',  { x: 0, opacity: 1, duration: 1.2, ease: 'power3.out', delay: 0.1 })
 
       /* Services scroll reveal */
-      gsap.set('.service-card', { opacity: 0, y: 80, scale: 0.96 })
       gsap.to('.service-card',
         { y: 0, opacity: 1, scale: 1, stagger: 0.15, duration: 0.85, ease: 'power3.out',
           scrollTrigger: { trigger: '.services-section', start: 'top 82%', once: true } }
       )
 
       /* Catalog preview */
-      gsap.fromTo('.cat-tile',
-        { y: 44, opacity: 0 },
+      gsap.to('.cat-tile',
         { y: 0, opacity: 1, stagger: 0.12, duration: 0.7, ease: 'power2.out',
           scrollTrigger: { trigger: '.catalog-preview', start: 'top 80%', once: true } }
       )
@@ -258,7 +208,7 @@ export default function Home() {
         <meta name="description" content="Продаж та монтаж печей для сауни, опалювальних печей та камінів. Виробник Новаслав та інші бренди. Установка під ключ — Київ та область." />
         <meta property="og:title" content="Буржуйка — Продаж та монтаж печей і камінів | Київ" />
         <meta property="og:description" content="Продаж та монтаж печей для сауни, опалювальних печей та камінів. Установка під ключ — Київ та область." />
-        <meta property="og:url" content="https://burzhuyka.com.ua" />
+        <meta property="og:url" content="https://burzhuyka.com" />
       </Helmet>
 
       <Navbar />
@@ -273,7 +223,7 @@ export default function Home() {
             className="w-full h-full object-cover"
           />
           {/* Dark vignette */}
-          <div className="absolute inset-0 bg-forge-black/80" />
+          <div className="absolute inset-0 bg-forge-black/40" />
           {/* Directional fade — left side more visible */}
           <div className="absolute inset-0 bg-gradient-to-r from-forge-black via-forge-black/60 to-forge-black/20" />
           {/* Bottom fade */}
@@ -298,13 +248,13 @@ export default function Home() {
 
               {/* Display heading — each line wrapped for clip reveal */}
               <h1 className="font-display font-bold uppercase leading-none mb-8 text-5xl sm:text-6xl lg:text-[80px]">
-                <div className="clip-reveal">
+                <div className="clip-reveal overflow-hidden">
                   <span className="hero-line block text-forge-cream">ПРОДАЄМО</span>
                 </div>
-                <div className="clip-reveal">
+                <div className="clip-reveal overflow-hidden">
                   <span className="hero-line block text-brand-primary">МОНТУЄМО</span>
                 </div>
-                <div className="clip-reveal">
+                <div className="clip-reveal overflow-hidden">
                   <span className="hero-line block text-forge-cream">ГАРАНТУЄМО</span>
                 </div>
               </h1>
@@ -322,7 +272,7 @@ export default function Home() {
                     className={`hero-stat flex-1 ${i > 0 ? 'border-l border-forge-border pl-6' : ''} ${i < 2 ? 'pr-6' : ''}`}
                   >
                     <div className="font-display text-3xl font-bold text-brand-primary leading-none mb-1">{s.num}</div>
-                    <div className="text-forge-muted text-xs leading-snug">{s.label}</div>
+                    <div className="text-forge-cream text-xs leading-snug">{s.label}</div>
                   </div>
                 ))}
               </div>

@@ -234,10 +234,20 @@ function ProductGalleryLayout({ product }) {
                   </h1>
 
                   {product.manufacturer_label && (
-                    <p className="text-gray-400 text-sm mb-6">
+                    <p className="text-gray-400 text-sm mb-4">
                       {product.manufacturer_label}
                       {product.country && ` · ${product.country}`}
                     </p>
+                  )}
+
+                  {product.price != null && (
+                    <div className="inline-flex items-baseline gap-1.5 mb-6 border-l-2 border-brand-primary pl-4">
+                      <span className="text-gray-400 text-sm">від</span>
+                      <span className="font-display text-3xl font-bold text-brand-primary leading-none">
+                        {Number(product.price).toLocaleString('uk-UA')}
+                      </span>
+                      <span className="text-gray-500 text-sm">грн</span>
+                    </div>
                   )}
 
                   {product.description && (

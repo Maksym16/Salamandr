@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS products (
   description     TEXT,
   slug            VARCHAR(255) UNIQUE,
   is_on_sale      BOOLEAN DEFAULT FALSE,
+  price           NUMERIC(12, 0),
   created_at      TIMESTAMP DEFAULT NOW(),
   updated_at      TIMESTAMP DEFAULT NOW()
 );

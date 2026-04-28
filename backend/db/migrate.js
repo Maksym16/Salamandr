@@ -12,7 +12,13 @@ async function migrate() {
       created_at TIMESTAMP DEFAULT NOW()
     )
   `
-  console.log('Migration complete: hero_carousel table ready')
+  console.log('Migration: hero_carousel table ready')
+
+  await sql`
+    ALTER TABLE products ADD COLUMN IF NOT EXISTS price NUMERIC(12, 0)
+  `
+  console.log('Migration: products.price column ready')
+
   process.exit(0)
 }
 

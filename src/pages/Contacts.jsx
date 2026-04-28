@@ -61,7 +61,7 @@ export default function Contacts() {
     setErrors({})
     setSending(true)
     try {
-      await fetch('https://formsubmit.co/ajax/burzhuyka_montazh@gmail.com', {
+      await fetch('https://formsubmit.co/ajax/burzhuyka.montazh@gmail.com', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({

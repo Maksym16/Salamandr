@@ -44,7 +44,18 @@ function ProductCard({ product }) {
           ))}
         </ul>
 
-        <div className="flex items-end justify-end pt-4 border-t border-gray-100 mt-auto">
+        <div className="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
+          {product.price != null ? (
+            <div>
+              <span className="text-gray-400 text-xs uppercase tracking-wider">від </span>
+              <span className="font-display text-lg font-bold text-brand-primary leading-none">
+                {Number(product.price).toLocaleString('uk-UA')}
+              </span>
+              <span className="text-gray-400 text-xs ml-1">грн</span>
+            </div>
+          ) : (
+            <span />
+          )}
           <span className="bg-brand-primary group-hover:bg-brand-dark text-white font-semibold text-xs px-5 py-2.5 uppercase tracking-wider transition-all group-hover:shadow-md">
             Детальніше
           </span>

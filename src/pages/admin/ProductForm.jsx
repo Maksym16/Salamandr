@@ -30,7 +30,7 @@ export default function ProductForm() {
   } = useForm({
     defaultValues: {
       name: '', slug: '', description: '', category_id: 'sauna', manufacturer_id: '',
-      specs: [{ value: '' }], spec_columns: [], is_on_sale: false,
+      specs: [{ value: '' }], spec_columns: [], is_on_sale: false, price: '',
     },
   })
 
@@ -65,6 +65,7 @@ export default function ProductForm() {
         specs:           (product.specs || []).map(s => ({ value: s })),
         spec_columns:    (product.spec_columns || []).map(c => ({ value: c })),
         is_on_sale:      product.is_on_sale ?? false,
+        price:           product.price != null ? String(product.price) : '',
       })
       // populate images from product
       const existing = [
@@ -124,6 +125,7 @@ export default function ProductForm() {
         specs: formData.specs.map(s => s.value).filter(Boolean),
         spec_columns: formData.spec_columns.map(c => c.value).filter(Boolean),
         manufacturer_id: formData.manufacturer_id || null,
+        price: formData.price !== '' ? Number(formData.price) : null,
       }
       return isEdit ? updateProduct(id, payload) : createProduct(payload)
     },
@@ -364,6 +366,26 @@ export default function ProductForm() {
             />
           </button>
           <input type="hidden" {...register('is_on_sale')} />
+        </div>
+
+        {/* Price */}
+        <div>
+          <label className={labelClass}>Орієнтовна ціна (грн) <span className="normal-case font-normal text-forge-muted/50">— необов'язково</span></label>
+          <div className="relative">
+            <input
+              {...register('price', {
+                validate: v => v === '' || (!isNaN(Number(v)) && Number(v) >= 0) || 'Введіть коректну суму',
+              })}
+              type="number"
+              min="0"
+              step="1"
+              className={inputClass}
+              placeholder="наприклад 12500"
+            />
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-forge-muted text-sm pointer-events-none">₴</span>
+          </div>
+          {errors.price && <p className="text-red-400 text-xs mt-1">{errors.price.message}</p>}
+          <p className="text-forge-muted/50 text-xs mt-1">Відображається як «від X грн» на картці та сторінці товару</p>
         </div>
 
         {/* Mutation error */}

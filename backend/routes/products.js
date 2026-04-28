@@ -92,13 +92,14 @@ router.post('/',
     const errors = validationResult(req)
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() })
 
-    const { name, category_id, manufacturer_id, image, images, specs, spec_columns, is_on_sale, description, slug } = req.body
+    const { name, category_id, manufacturer_id, image, images, specs, spec_columns, is_on_sale, description, slug, price } = req.body
     try {
       const rows = await sql`
-        INSERT INTO products (name, category_id, manufacturer_id, image, images, specs, spec_columns, is_on_sale, description, slug)
+        INSERT INTO products (name, category_id, manufacturer_id, image, images, specs, spec_columns, is_on_sale, description, slug, price)
         VALUES (
           ${name}, ${category_id}, ${manufacturer_id || null}, ${image || null},
-          ${images || null}, ${specs || []}, ${spec_columns || null}, ${is_on_sale ?? false}, ${description || null}, ${slug || null}
+          ${images || null}, ${specs || []}, ${spec_columns || null}, ${is_on_sale ?? false}, ${description || null}, ${slug || null},
+          ${price != null && price !== '' ? Number(price) : null}
         )
         RETURNING *
       `
@@ -119,7 +120,7 @@ router.put('/:id',
     const errors = validationResult(req)
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() })
 
-    const { name, category_id, manufacturer_id, image, images, specs, spec_columns, is_on_sale, description, slug } = req.body
+    const { name, category_id, manufacturer_id, image, images, specs, spec_columns, is_on_sale, description, slug, price } = req.body
     try {
       const rows = await sql`
         UPDATE products SET
@@ -133,6 +134,7 @@ router.put('/:id',
           is_on_sale      = ${is_on_sale ?? false},
           description     = ${description || null},
           slug            = ${slug || null},
+          price           = ${price != null && price !== '' ? Number(price) : null},
           updated_at      = NOW()
         WHERE id = ${req.params.id}
         RETURNING *
